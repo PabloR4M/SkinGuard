@@ -1,22 +1,20 @@
 import SwiftUI
 
 struct HomeView: View {
-    // Estados para controlar la cámara/galería
-    @State private var mostrarSelectorImagen = false
-    @State private var imagenSeleccionada: UIImage?
-    @State private var tipoDeFuente: UIImagePickerController.SourceType = .photoLibrary
+    // Conectamos la vista con su "Cerebro"
+    @StateObject private var viewModel = HomeViewModel()
     
-    // Estados temporales para simular la IA
-    @State private var estaProcesando = false
-    @State private var analisisCompletado = false
+    // Estados exclusivos de la interfaz (Cámara/Galería)
+    @State private var mostrarSelectorImagen = false
+    @State private var tipoDeFuente: UIImagePickerController.SourceType = .photoLibrary
     
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 25) {
                     
-                    // 1. ÁREA DE IMAGEN Y RESULTADOS
-                    if let imagen = imagenSeleccionada {
+                    // 1. ÁREA DE IMAGEN
+                    if let imagen = viewModel.imagenSeleccionada {
                         Image(uiImage: imagen)
                             .resizable()
                             .scaledToFill()
@@ -25,18 +23,21 @@ struct HomeView: View {
                             .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
                             .padding(.horizontal)
                         
-                        // 2. CUADRO DE RECOMENDACIONES (Gestión de incertidumbre)
-                        if analisisCompletado {
+                        // 2. RESULTADOS DE LA IA
+                        if viewModel.analisisCompletado {
                             VStack(alignment: .leading, spacing: 12) {
                                 HStack {
-                                    Image(systemName: "shield.checkerboard")
-                                        .foregroundColor(.blue)
-                                    Text("Análisis Preliminar")
+                                    Image(systemName: viewModel.resultadoPrediccion == "Irregulares" ? "exclamationmark.triangle.fill" : "checkmark.shield.fill")
+                                        .foregroundColor(viewModel.resultadoPrediccion == "Irregulares" ? .orange : .green)
+                                    
+                                    Text(viewModel.resultadoPrediccion == "Irregulares" ? "Revisión Sugerida" : "Análisis Favorable")
                                         .font(.headline)
                                         .foregroundColor(.primary)
                                 }
                                 
-                                Text("Hemos detectado un patrón de pigmentación que sugiere revisión. Recuerda que SkinGuard es una herramienta de apoyo y **no un diagnóstico médico definitivo**.")
+                                Text(viewModel.resultadoPrediccion == "Irregulares" ?
+                                     "Hemos detectado un patrón que sugiere revisión. Recuerda que SkinGuard es una herramienta de apoyo y **no un diagnóstico médico definitivo**." :
+                                     "No se detectan irregularidades de alto riesgo, pero la prevención es clave.")
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                                 
@@ -45,7 +46,9 @@ struct HomeView: View {
                                     .bold()
                                     .padding(.top, 5)
                                 
-                                Text("Te sugerimos agendar una cita con un dermatólogo para una evaluación profesional y tener total tranquilidad.")
+                                Text(viewModel.resultadoPrediccion == "Irregulares" ?
+                                     "Te sugerimos agendar una cita con un dermatólogo para una evaluación profesional." :
+                                     "Sigue usando protector solar y monitorea tu piel regularmente.")
                                     .font(.subheadline)
                                     .foregroundColor(.primary)
                             }
@@ -54,7 +57,6 @@ struct HomeView: View {
                             .cornerRadius(20)
                             .padding(.horizontal)
                         }
-                        
                     } else {
                         // Estado Vacío
                         VStack {
@@ -68,13 +70,12 @@ struct HomeView: View {
                                 .multilineTextAlignment(.center)
                                 .foregroundColor(.gray)
                                 .padding(.top)
-                                .padding(.horizontal, 40)
                         }
                         .padding(.top, 60)
                     }
                     
                     // 3. INDICADOR DE CARGA
-                    if estaProcesando {
+                    if viewModel.estaProcesando {
                         VStack {
                             ProgressView()
                                 .scaleEffect(1.5)
@@ -88,24 +89,18 @@ struct HomeView: View {
                     
                     Spacer(minLength: 40)
                     
-                    // 4. BOTONES DE ACCIÓN
+                    // 4. BOTONES
                     HStack(spacing: 20) {
                         Button(action: {
                             tipoDeFuente = .photoLibrary
                             mostrarSelectorImagen = true
                         }) {
                             VStack {
-                                Image(systemName: "photo.on.rectangle")
-                                    .font(.title)
-                                Text("Galería")
-                                    .font(.caption)
-                                    .padding(.top, 2)
+                                Image(systemName: "photo.on.rectangle").font(.title)
+                                Text("Galería").font(.caption).padding(.top, 2)
                             }
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.blue.opacity(0.1))
-                            .foregroundColor(.blue)
-                            .cornerRadius(15)
+                            .frame(maxWidth: .infinity).padding()
+                            .background(Color.blue.opacity(0.1)).foregroundColor(.blue).cornerRadius(15)
                         }
                         
                         Button(action: {
@@ -113,17 +108,11 @@ struct HomeView: View {
                             mostrarSelectorImagen = true
                         }) {
                             VStack {
-                                Image(systemName: "camera")
-                                    .font(.title)
-                                Text("Cámara")
-                                    .font(.caption)
-                                    .padding(.top, 2)
+                                Image(systemName: "camera").font(.title)
+                                Text("Cámara").font(.caption).padding(.top, 2)
                             }
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(15)
+                            .frame(maxWidth: .infinity).padding()
+                            .background(Color.blue).foregroundColor(.white).cornerRadius(15)
                             .shadow(color: Color.blue.opacity(0.3), radius: 5, x: 0, y: 3)
                         }
                     }
@@ -133,20 +122,13 @@ struct HomeView: View {
             }
             .navigationTitle("SkinGuard")
             .sheet(isPresented: $mostrarSelectorImagen) {
-                // Llama al ImagePicker que ya tienes en tu otro archivo
-                ImagePicker(imagenSeleccionada: $imagenSeleccionada, sourceType: tipoDeFuente)
+                // El ImagePicker ahora guarda la foto en el ViewModel
+                ImagePicker(imagenSeleccionada: $viewModel.imagenSeleccionada, sourceType: tipoDeFuente)
             }
-            
-            .onChange(of: imagenSeleccionada) { oldValue, newValue in // Cambiado a dos parámetros
-                if newValue != nil { // Usamos newValue directamente
-                    analisisCompletado = false
-                    estaProcesando = true
-                    
-                    // Simulación de espera de la IA
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                        estaProcesando = false
-                        analisisCompletado = true
-                    }
+            .onChange(of: viewModel.imagenSeleccionada) { oldValue, newValue in
+                if newValue != nil {
+                    // Cuando hay foto nueva, le decimos al cerebro que la analice con la IA
+                    viewModel.analizarImagen()
                 }
             }
         }
