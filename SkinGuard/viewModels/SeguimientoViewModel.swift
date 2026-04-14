@@ -13,23 +13,20 @@ class SeguimientoViewModel: ObservableObject {
     }
     
     // MARK: - GUARDAR NUEVO REGISTRO
-    func guardarRegistro(imagen: UIImage, ubicacion: String, notas: String, resultado: String) {
-        // 1. Crear un nombre único para la foto
-        let nombreArchivo = UUID().uuidString + ".jpg"
-        
-        // 2. Guardar la foto físicamente en el iPhone
-        if let data = imagen.jpegData(compressionQuality: 0.8) {
-            let url = getDocumentsDirectory().appendingPathComponent(nombreArchivo)
-            try? data.write(to: url)
+        func guardarRegistro(imagen: UIImage, ubicacion: String, notas: String, resultado: String, confianza: Double) {
+            let nombreArchivo = UUID().uuidString + ".jpg"
+            
+            if let data = imagen.jpegData(compressionQuality: 0.8) {
+                let url = getDocumentsDirectory().appendingPathComponent(nombreArchivo)
+                try? data.write(to: url)
+            }
+            
+            // Pasamos la confianza al registro
+            let nuevoRegistro = AnalisisRegistro(fecha: Date(), ubicacion: ubicacion, nombreImagen: nombreArchivo, notas: notas, resultado: resultado, confianza: confianza)
+            
+            registros.insert(nuevoRegistro, at: 0)
+            guardarEnUserDefaults()
         }
-        
-        // 3. Crear el registro de texto
-        let nuevoRegistro = AnalisisRegistro(fecha: Date(), ubicacion: ubicacion, nombreImagen: nombreArchivo, notas: notas, resultado: resultado)
-        
-        // 4. Agregar a la lista y guardar en UserDefaults
-        registros.insert(nuevoRegistro, at: 0) // Pone el más nuevo hasta arriba
-        guardarEnUserDefaults()
-    }
     
     // MARK: - ELIMINAR REGISTRO
     func eliminarRegistro(_ registro: AnalisisRegistro) {

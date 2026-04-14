@@ -92,12 +92,17 @@ struct DetalleRegistroView: View {
                 }
             }
             Section(header: Text("Resultado del Análisis")) {
-                HStack {
-                    Image(systemName: registro.resultado == "Irregulares" ? "exclamationmark.triangle.fill" : "checkmark.shield.fill")
-                        .foregroundColor(registro.resultado == "Irregulares" ? .orange : .green)
-                    Text(registro.resultado == "Irregulares" ? "Revisión Sugerida" : "Análisis Favorable")
-                        .bold()
-                }
+                            HStack {
+                                Image(systemName: registro.resultado == "Irregulares" ? "exclamationmark.triangle.fill" : "checkmark.shield.fill")
+                                    .foregroundColor(registro.resultado == "Irregulares" ? .orange : .green)
+                                Text(registro.resultado == "Irregulares" ? "Revisión Sugerida" : "Análisis Favorable")
+                                    .bold()
+                            }
+                            
+                            // Muestra la confianza en el historial
+                            if let confianza = registro.confianza {
+                                LabeledContent("Confiabilidad", value: "\(Int(confianza * 100))%")
+                            }
             }
             Section(header: Text("Detalles")) {
                 LabeledContent("Ubicación", value: registro.ubicacion)
