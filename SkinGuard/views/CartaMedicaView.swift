@@ -46,6 +46,8 @@ class FlujoCartaViewModel: ObservableObject {
 // MARK: - VISTA PRINCIPAL
 struct CartaMedicaAIView: View {
     @StateObject private var viewModel = FlujoCartaViewModel()
+    // NUEVO: Agregamos el AppState para poder cerrar sesión
+    @EnvironmentObject var appState: AppState
     
     var body: some View {
         NavigationStack {
@@ -57,14 +59,32 @@ struct CartaMedicaAIView: View {
                         // LA CARTA MÉDICA (VISUALIZACIÓN)
                         VistaDocumentoMedico(datos: viewModel.datos)
                         
-                        Button(action: { viewModel.mostrarFormulario = true }) {
-                            Label("Editar Ficha Médica", systemImage: "doc.text.badge.plus")
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.blue)
-                                .cornerRadius(14)
+                        // BOTONES DE ACCIÓN
+                        VStack(spacing: 15) {
+                            // Botón de Editar Cartilla
+                            Button(action: { viewModel.mostrarFormulario = true }) {
+                                Label("Editar Ficha Médica", systemImage: "doc.text.badge.plus") // Recuerda que cambiaste el ícono si te daba error
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.blue)
+                                    .cornerRadius(14)
+                            }
+                            
+                            // NUEVO: Botón de Cerrar Sesión
+                            Button(action: {
+                                // Esto borrará la sesión de UserDefaults y te regresará al WelcomeView
+                                appState.cerrarSesion()
+                            }) {
+                                Text("Cerrar Sesión")
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.red)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.red.opacity(0.1))
+                                    .cornerRadius(14)
+                            }
                         }
                         .padding(.horizontal)
                     }

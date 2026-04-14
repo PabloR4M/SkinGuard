@@ -36,15 +36,7 @@ struct MainTabMedico: View {
     }
 }
 
-// MARK: - VISTAS MOCK PARA EL MÉDICO
-struct SeguimientoPacientesView: View {
-    var body: some View {
-        NavigationStack {
-            ContentUnavailableView("Módulo en Desarrollo", systemImage: "person.3.sequence.fill", description: Text("Aquí el médico gestionará el historial vinculado a las cuentas de sus pacientes."))
-                .navigationTitle("Mis Pacientes")
-        }
-    }
-}
+
 
 struct InfoMedicoView: View {
     @EnvironmentObject var appState: AppState

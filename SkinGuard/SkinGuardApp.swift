@@ -9,7 +9,7 @@ struct SkinGuardApp: App {
         WindowGroup {
             // CONTROLADOR DE TRÁFICO
             if !appState.isLoggedIn {
-                LoginView()
+                WelcomeView()
                     .environmentObject(appState)
             } else if appState.isDoctor {
                 MainTabMedico()
