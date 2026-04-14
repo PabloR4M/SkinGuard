@@ -1,17 +1,25 @@
-//
-//  SkinGuardApp.swift
-//  SkinGuard
-//
-//  Created by MaciOSLabAir29 on 14/04/26.
-//
-
 import SwiftUI
 
 @main
 struct SkinGuardApp: App {
+    @StateObject private var appState = AppState()
+    @StateObject private var seguimientoVM = SeguimientoViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            MainTabView()
+            // CONTROLADOR DE TRÁFICO
+            if !appState.isLoggedIn {
+                LoginView()
+                    .environmentObject(appState)
+            } else if appState.isDoctor {
+                MainTabMedico()
+                    .environmentObject(appState)
+                    .environmentObject(seguimientoVM)
+            } else {
+                MainTabUsuario()
+                    .environmentObject(appState)
+                    .environmentObject(seguimientoVM)
+            }
         }
     }
 }

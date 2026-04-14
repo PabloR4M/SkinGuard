@@ -1,30 +1,69 @@
 import SwiftUI
 
-struct MainTabView: View {
-    
-    @StateObject private var seguimientoVM = SeguimientoViewModel()
-    
+// MARK: - TAB PARA USUARIOS (Sin porcentaje)
+struct MainTabUsuario: View {
     var body: some View {
         // El TabView es el contenedor principal
         TabView {
-            HomeView()
-                .tabItem {
-                    Label("Análisis", systemImage: "viewfinder")
+            HomeViewLite() // Tu vista sin el porcentaje
+                .tabItem { Label("Análisis", systemImage: "viewfinder") }
+            
+            SeguimientoView() // El historial
+                .tabItem { Label("Historial", systemImage: "clock.fill") }
+            
+
+            CartaMedicaAIView() // El código que me pasaste arriba
+                .tabItem { Label("Mi Cartilla", systemImage: "menucard.fill") }
+        }
+        .tint(.blue)
+    }
+}
+
+// MARK: - TAB PARA MÉDICOS (Con porcentaje)
+struct MainTabMedico: View {
+    var body: some View {
+        TabView {
+            HomeView() // Tu vista original con el porcentaje
+                .tabItem { Label("Escáner", systemImage: "camera.badge.ellipsis") }
+            
+            SeguimientoPacientesView() // Vista Mock
+                .tabItem { Label("Pacientes", systemImage: "person.2.fill") }
+            
+            InfoMedicoView() // Vista Mock
+                .tabItem { Label("Perfil", systemImage: "stethoscope") }
+        }
+        .tint(.indigo) // Un color diferente para que el médico sepa que está en su perfil
+    }
+}
+
+// MARK: - VISTAS MOCK PARA EL MÉDICO
+struct SeguimientoPacientesView: View {
+    var body: some View {
+        NavigationStack {
+            ContentUnavailableView("Módulo en Desarrollo", systemImage: "person.3.sequence.fill", description: Text("Aquí el médico gestionará el historial vinculado a las cuentas de sus pacientes."))
+                .navigationTitle("Mis Pacientes")
+        }
+    }
+}
+
+struct InfoMedicoView: View {
+    @EnvironmentObject var appState: AppState
+    
+    var body: some View {
+        NavigationStack {
+            List {
+                Section(header: Text("Mi Licencia")) {
+                    LabeledContent("Estado", value: "Activa (Premium)")
+                    LabeledContent("Cédula", value: "12345678")
                 }
-            
-            SeguimientoView()
-                .tabItem {
-                    Label("Historial", systemImage: "clock.fill")
+                Section {
+                    Button(role: .destructive, action: { appState.cerrarSesion() }) {
+                        Text("Cerrar Sesión")
+                    }
                 }
-            
-            CartaMedicaAIView()
-                .tabItem {
-                    Label("Educación", systemImage: "info.circle.fill")
-                }
-            
-            
-        } // <--- Aquí cerramos el TabView
-        .tint(.blue) // Ahora este modificador afecta al TabView
-        .environmentObject(seguimientoVM) // Y este inyecta el VM a todas sus pestañas
-    } // <--- Aquí cerramos el body
+            }
+            .navigationTitle("Perfil Médico")
+        }
+    }
+
 }
