@@ -22,7 +22,7 @@ struct HomeView: View {
                             .scaledToFill()
                             .frame(height: 250)
                             .clipShape(RoundedRectangle(cornerRadius: 20))
-                            .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
+                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
                             .padding(.horizontal)
                         
                         // 2. CUADRO DE RECOMENDACIONES (Gestión de incertidumbre)
