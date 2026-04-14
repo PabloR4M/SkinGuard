@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct RegisterView: View {
+struct SeguimientoView: View {
     var body: some View {
         NavigationView {
             Text("Aquí irá el historial o registro de lesiones.")
@@ -11,5 +11,5 @@ struct RegisterView: View {
 }
 
 #Preview {
-    RegisterView()
+    SeguimientoView()
 }

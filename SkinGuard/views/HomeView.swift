@@ -136,10 +136,12 @@ struct HomeView: View {
                 // Llama al ImagePicker que ya tienes en tu otro archivo
                 ImagePicker(imagenSeleccionada: $imagenSeleccionada, sourceType: tipoDeFuente)
             }
-            .onChange(of: imagenSeleccionada) { _ in
-                if imagenSeleccionada != nil {
+            
+            .onChange(of: imagenSeleccionada) { oldValue, newValue in // Cambiado a dos parámetros
+                if newValue != nil { // Usamos newValue directamente
                     analisisCompletado = false
                     estaProcesando = true
+                    
                     // Simulación de espera de la IA
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                         estaProcesando = false

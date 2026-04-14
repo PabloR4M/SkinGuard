@@ -5,18 +5,18 @@ struct MainTabView: View {
         TabView {
             HomeView()
                 .tabItem {
-                    Label("Inicio", systemImage: "house.fill")
+                    Label("Analizar", systemImage: "camera.viewfinder")
                 }
             
-            RegisterView()
+            SeguimientoView()
                 .tabItem {
-                    Label("Registro", systemImage: "clipboard.fill")
+                    Label("Seguimiento", systemImage: "waveform.path.ecg")
                 }
             
-            InfoView()
+            CartaMedicaAIView()
                 .tabItem {
-                    Label("Info", systemImage: "info.circle.fill")
-            }
+                    Label("Mi Carta", systemImage: "person.text.rectangle.fill")
+                }
         }
         .tint(.blue)
     }
