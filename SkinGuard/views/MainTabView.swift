@@ -5,6 +5,7 @@ struct MainTabView: View {
     @StateObject private var seguimientoVM = SeguimientoViewModel()
     
     var body: some View {
+        // El TabView es el contenedor principal
         TabView {
             HomeView()
                 .tabItem {
@@ -20,8 +21,10 @@ struct MainTabView: View {
                 .tabItem {
                     Label("Educación", systemImage: "info.circle.fill")
                 }
-        }
-        .tint(.blue)
-        .environmentObject(seguimientoVM) // 🌟 Inyecta el cerebro a toda la app
-    }
+            
+            
+        } // <--- Aquí cerramos el TabView
+        .tint(.blue) // Ahora este modificador afecta al TabView
+        .environmentObject(seguimientoVM) // Y este inyecta el VM a todas sus pestañas
+    } // <--- Aquí cerramos el body
 }

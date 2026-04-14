@@ -15,9 +15,22 @@
 		E39C0BD62F8EB92B008D71C0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = SkinGuard/Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		E39173012F8ED346007E7A9A /* Exceptions for "SkinGuard" folder in "SkinGuard" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = AF8F74E82F8E9A4000779A04 /* SkinGuard */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		AF8F74EB2F8E9A4000779A04 /* SkinGuard */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E39173012F8ED346007E7A9A /* Exceptions for "SkinGuard" folder in "SkinGuard" target */,
+			);
 			path = SkinGuard;
 			sourceTree = "<group>";
 		};
@@ -261,8 +274,9 @@
 				DEVELOPMENT_TEAM = MMR6RY8749;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "SkinGuard necesita acceso a tu cámara para poder analizar las lesiones en tu piel.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "SkinGuard necesita acceso a tu galería para analizar las fotos de tu piel.";
+				INFOPLIST_FILE = SkinGuard/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = usar;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = usar;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -296,8 +310,9 @@
 				DEVELOPMENT_TEAM = MMR6RY8749;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "SkinGuard necesita acceso a tu cámara para poder analizar las lesiones en tu piel.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "SkinGuard necesita acceso a tu galería para analizar las fotos de tu piel.";
+				INFOPLIST_FILE = SkinGuard/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = usar;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = usar;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
